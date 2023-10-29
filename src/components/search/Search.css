@@ -1,0 +1,12 @@
+.searchBar {
+  border-radius: 12px;
+  border-color: transparent;
+  background-color: #f2f4f8;
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
