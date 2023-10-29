@@ -9,7 +9,7 @@ export type Book = {
   publishedYear: number | null;
 };
 
-export const findBook = async (term: string): Promise<Book[] | undefined> => {
+export const findBook = async (term: string): Promise<Book[]> => {
   if (term !== '') {
     return fetchByTitle(term);
   }
@@ -17,7 +17,7 @@ export const findBook = async (term: string): Promise<Book[] | undefined> => {
   return await fetchAll();
 };
 
-const fetchAll = async (): Promise<Book[] | undefined> => {
+const fetchAll = async (): Promise<Book[]> => {
   try {
     const response = await fetch(URL_BOOK);
 
@@ -26,10 +26,11 @@ const fetchAll = async (): Promise<Book[] | undefined> => {
     return books;
   } catch (error) {
     console.log(error);
+    return [];
   }
 };
 
-const fetchByTitle = async (term: string): Promise<Book[] | undefined> => {
+const fetchByTitle = async (term: string): Promise<Book[]> => {
   try {
     const postData = new URLSearchParams();
     postData.append('name', term);
@@ -44,5 +45,6 @@ const fetchByTitle = async (term: string): Promise<Book[] | undefined> => {
     return books;
   } catch (error) {
     console.log(error);
+    return [];
   }
 };
