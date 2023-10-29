@@ -3,18 +3,25 @@ import { Search } from '../../components/search/Search';
 import { ResultsList } from '../../components/resultsList/ResultsList';
 import { Book, findBook } from '../../services/book';
 import { Loader } from '../../components/loader/Loader';
+import './Home.css';
 
 interface IState {
   books: Array<Book>;
   inputValue: string;
   isFetched: boolean;
+  error: boolean;
 }
 const LOCALSTORAGE_KEY = 'searchTerm';
 export class Home extends Component<Record<string, never>, IState> {
   constructor(props: Record<string, never>) {
     super(props);
     const savedSearch = localStorage.getItem(LOCALSTORAGE_KEY) ?? '';
-    this.state = { books: [], inputValue: savedSearch, isFetched: false };
+    this.state = {
+      books: [],
+      inputValue: savedSearch,
+      isFetched: false,
+      error: false,
+    };
     this.handleInput = this.handleInput.bind(this);
     this.handleSearchClick = this.handleSearchClick.bind(this);
   }
@@ -46,10 +53,23 @@ export class Home extends Component<Record<string, never>, IState> {
   };
 
   render() {
-    const { inputValue, isFetched, books } = this.state;
+    const { inputValue, isFetched, books, error } = this.state;
+
+    if (error) {
+      throw new Error('Error!');
+    }
 
     return (
-      <div>
+      <div className="homeContainer">
+        <button
+          onClick={() => {
+            this.setState(() => ({
+              error: true,
+            }));
+          }}
+        >
+          Throw an Error
+        </button>
         <Search
           onChange={this.handleInput}
           onClick={this.handleSearchClick}
