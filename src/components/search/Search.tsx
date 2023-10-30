@@ -7,30 +7,23 @@ type Props = {
   inputValue: string;
 };
 
-export class Search extends Component<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.handleInput = this.handleInput.bind(this);
-  }
-
-  handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+export const Search = ({ inputValue, onClick, onChange }: Props) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.currentTarget.value;
-    this.props.onChange(searchTerm);
+    onChange(searchTerm);
   };
 
-  render() {
-    return (
-      <div className="search">
-        <input
-          type="text"
-          value={this.props.inputValue}
-          onChange={this.handleInput}
-          className="searchBar"
-        />
-        <button type="button" onClick={this.props.onClick}>
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="search">
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInput}
+        className="searchBar"
+      />
+      <button type="button" onClick={onClick}>
+        Search
+      </button>
+    </div>
+  );
+};
