@@ -1,31 +1,24 @@
-import { Component, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Search } from '../../components/search/Search';
 import { ResultsList } from '../../components/resultsList/ResultsList';
 import { Book, findBook } from '../../services/book';
 import { Loader } from '../../components/loader/Loader';
 import './Home.css';
 
-interface IState {
-  books: Array<Book>;
-  inputValue: string;
-  isFetched: boolean;
-  error: boolean;
-}
 const LOCALSTORAGE_KEY = 'searchTerm';
 
+const getLsSearchTerm = () => localStorage.getItem(LOCALSTORAGE_KEY) ?? '';
+
 export const Home = () => {
-  const [searchTerm, setSearchTerm] = useState(
-    () => localStorage.getItem(LOCALSTORAGE_KEY) ?? ''
-  );
+  const [searchTerm, setSearchTerm] = useState(getLsSearchTerm);
   const [books, setBooks] = useState<Book[]>([]);
   const [isFetched, setIsFetched] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await findBook(
-        localStorage.getItem(LOCALSTORAGE_KEY) ?? ''
-      );
+      const term = getLsSearchTerm();
+      const result = await findBook(term);
       setBooks(result);
       setIsFetched(true);
     }
