@@ -1,0 +1,13 @@
+.ResultDetails {
+  background-color: aqua;
+  position: relative;
+  padding: 20px;
+}
+
+.ResultDetails_close {
+  position: absolute;
+  right: 0;
+  background-color: red;
+  top: 0;
+  cursor: pointer;
+}

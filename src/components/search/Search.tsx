@@ -1,36 +1,29 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import './Search.css';
+import { getLsSearchTerm } from '../../services/localStorage';
 
 type Props = {
-  onChange: (term: string) => void;
-  onClick: () => void;
-  inputValue: string;
+  onClick: (searchTerm: string) => void;
 };
 
-export class Search extends Component<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.handleInput = this.handleInput.bind(this);
-  }
-
-  handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+export const Search = ({ onClick }: Props) => {
+  const [searchTerm, setSearchTerm] = useState(() => getLsSearchTerm());
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.currentTarget.value;
-    this.props.onChange(searchTerm);
+    setSearchTerm(searchTerm);
   };
 
-  render() {
-    return (
-      <div className="search">
-        <input
-          type="text"
-          value={this.props.inputValue}
-          onChange={this.handleInput}
-          className="searchBar"
-        />
-        <button type="button" onClick={this.props.onClick}>
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="search">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleInput}
+        className="searchBar"
+      />
+      <button type="button" onClick={() => onClick(searchTerm)}>
+        Search
+      </button>
+    </div>
+  );
+};
