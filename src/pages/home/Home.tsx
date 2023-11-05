@@ -1,61 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Search } from '../../components/search/Search';
-import { ResultsList } from '../../components/resultsList/ResultsList';
-import { Book, findBook } from '../../services/book';
-import { Loader } from '../../components/loader/Loader';
 import './Home.css';
-
-const LOCALSTORAGE_KEY = 'searchTerm';
-
-const getLsSearchTerm = () => localStorage.getItem(LOCALSTORAGE_KEY) ?? '';
+import { LOCALSTORAGE_KEY } from '../../services/localStorage';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export const Home = () => {
-  const [searchTerm, setSearchTerm] = useState(getLsSearchTerm);
-  const [books, setBooks] = useState<Book[]>([]);
-  const [isFetched, setIsFetched] = useState(false);
-  const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchData() {
-      const term = getLsSearchTerm();
-      const result = await findBook(term);
-      setBooks(result);
-      setIsFetched(true);
-    }
-    fetchData();
-  }, []);
+    navigate(`search/1`);
+  }, [navigate]);
 
-  const handleInput = (searchTerm: string) => {
-    setSearchTerm(searchTerm);
-  };
-
-  const handleSearchClick = async () => {
+  const handleSearchClick = async (searchTerm: string) => {
     localStorage.setItem(LOCALSTORAGE_KEY, searchTerm);
-    setIsFetched(false);
-    const result = await findBook(searchTerm);
-    setIsFetched(true);
-    setBooks(result);
+    navigate(`search/1`);
   };
-
-  if (error) {
-    throw new Error('Error!');
-  }
 
   return (
     <div className="homeContainer">
-      <button
-        onClick={() => {
-          setError(true);
-        }}
-      >
-        Throw an Error
-      </button>
-      <Search
-        onChange={handleInput}
-        onClick={handleSearchClick}
-        inputValue={searchTerm}
-      />
-      {!isFetched ? <Loader /> : <ResultsList books={books} />}
+      <Search onClick={handleSearchClick} />
+      <Outlet></Outlet>
+
+      {/* {navigation.state === 'loading' ? (
+        <Loader />
+      ) : (
+        <ResultsList books={books} />
+      )} */}
     </div>
   );
 };

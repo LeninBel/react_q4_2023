@@ -1,0 +1,10 @@
+.PaginationFooter {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.Results {
+  width: 100%;
+  display: flex;
+}

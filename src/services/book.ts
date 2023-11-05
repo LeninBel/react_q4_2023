@@ -1,4 +1,5 @@
-const URL_BOOK = 'https://stapi.co/api/v2/rest/book/search';
+const URL_BOOK_SEARCH = 'https://stapi.co/api/v2/rest/book/search';
+const URL_BOOK = 'https://stapi.co/api/v2/rest/book';
 
 export type Book = {
   uid: string;
@@ -9,42 +10,83 @@ export type Book = {
   publishedYear: number | null;
 };
 
-export const findBook = async (term: string): Promise<Book[]> => {
-  if (term !== '') {
-    return fetchByTitle(term);
-  }
-
-  return await fetchAll();
+type PageMeta = {
+  firstPage: boolean;
+  lastPage: boolean;
+  numberOfElements: number;
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
 };
 
-const fetchAll = async (): Promise<Book[]> => {
+export type BooksResponse = {
+  books: Book[];
+  page: PageMeta;
+};
+
+export const findBook = async (
+  term: string,
+  pageNumber: number,
+  pageSize: number
+): Promise<BooksResponse | undefined> => {
+  if (term !== '') {
+    return fetchByTitle(term, pageNumber, pageSize);
+  }
+
+  return await fetchAll(pageNumber, pageSize);
+};
+
+export const getBook = async (id: string): Promise<Book> => {
+  const response = await fetch(`${URL_BOOK}?uid=${id}`);
+
+  const { book } = await response.json();
+  return book;
+};
+
+const fetchAll = async (
+  pageNumber: number,
+  pageSize: number
+): Promise<BooksResponse | undefined> => {
   try {
-    const response = await fetch(URL_BOOK);
+    const params = new URLSearchParams({
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
+    });
+    const response = await fetch(`${URL_BOOK_SEARCH}?${params}`);
 
-    const { books } = await response.json();
-
-    return books;
+    const responseJson = await response.json();
+    console.log(responseJson);
+    return responseJson;
   } catch (error) {
     console.log(error);
-    return [];
+    return undefined;
   }
 };
 
-const fetchByTitle = async (term: string): Promise<Book[]> => {
+const fetchByTitle = async (
+  term: string,
+  pageNumber: number,
+  pageSize: number
+): Promise<BooksResponse | undefined> => {
   try {
     const postData = new URLSearchParams();
     postData.append('name', term);
     postData.append('title', term);
 
-    const response = await fetch(URL_BOOK, {
+    const params = new URLSearchParams({
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
+    });
+    const response = await fetch(`${URL_BOOK_SEARCH}?${params}`, {
       method: 'POST',
       body: postData,
     });
 
-    const { books } = await response.json();
-    return books;
+    const responseJson = await response.json();
+    return responseJson;
   } catch (error) {
     console.log(error);
-    return [];
+    return undefined;
   }
 };

@@ -1,0 +1,12 @@
+.Pagination {
+  overflow-x: auto;
+}
+
+.Pagination_buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.button_active {
+  background-color: green;
+}
