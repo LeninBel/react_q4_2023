@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Search } from '../../components/search/Search';
 import './Home.css';
-import { LOCALSTORAGE_KEY } from '../../services/localStorage';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useMatch, useNavigate } from 'react-router-dom';
 
 export const Home = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const isHomePage = useMatch('/');
 
   useEffect(() => {
-    navigate(`search/1`);
-  }, [navigate]);
-
-  const handleSearchClick = async (searchTerm: string) => {
-    localStorage.setItem(LOCALSTORAGE_KEY, searchTerm);
-    navigate(`search/1`, { replace: true });
-  };
+    if (isHomePage) {
+      navigate(`search/1`);
+    }
+  }, [navigate, isHomePage]);
 
   if (error) {
     throw new Error('Error!');
@@ -30,7 +27,7 @@ export const Home = () => {
       >
         Throw an Error
       </button>
-      <Search onClick={handleSearchClick} />
+      <Search />
       <Outlet></Outlet>
     </div>
   );

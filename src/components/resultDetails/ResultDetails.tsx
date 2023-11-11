@@ -4,6 +4,7 @@ import { Loader } from '../loader/Loader';
 import './ResultDetails.css';
 import { useEffect } from 'react';
 import React from 'react';
+import { NotFound } from '../../pages/notFound/NotFound';
 
 type Data = {
   result: Promise<Book>;
@@ -29,10 +30,7 @@ export const ResultDetails = () => {
 
   return (
     <React.Suspense fallback={<Loader />}>
-      <Await
-        resolve={res.result}
-        errorElement={<p>Opps something went wrong!</p>}
-      >
+      <Await resolve={res.result} errorElement={<NotFound />}>
         {(result) => {
           return (
             <div className="ResultDetails">
