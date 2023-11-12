@@ -22,7 +22,7 @@ export const ResultsListContainer = () => {
       setResults(res);
       seIsLoading(false);
       if (res === undefined) {
-        navigate('/notFound');
+        // navigate('/notFound');
       }
     };
 
@@ -30,7 +30,7 @@ export const ResultsListContainer = () => {
   }, [pageId, search, setResults, itemsPerPage, navigate]);
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader id="" />;
   }
 
   if (results && results.books.length === 0) {

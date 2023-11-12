@@ -1,11 +1,6 @@
 import { createContext } from 'react';
 import { BooksResponse } from '../services/book';
 
-export const SearchContext = createContext({
-  search: '',
-  setSearch: () => {},
-});
-
 type AppContextType = {
   search: string;
   setSearch: (str: string) => void;
@@ -15,11 +10,13 @@ type AppContextType = {
   setItemsPerPage: (perPage: number) => void;
 };
 
-export const AppContext = createContext<AppContextType>({
+export const defaultValues = {
   search: '',
   setSearch: () => {},
   results: undefined,
   setResults: () => {},
   itemsPerPage: 50,
   setItemsPerPage: () => {},
-});
+};
+
+export const AppContext = createContext<AppContextType>(defaultValues);

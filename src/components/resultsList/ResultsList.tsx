@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Book } from '../../services/book';
 import './ResultsList.css';
 import { useContext } from 'react';
@@ -6,6 +6,7 @@ import { AppContext } from '../../context/SearchContext';
 
 export const ResultsList = () => {
   const { results } = useContext(AppContext);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -22,9 +23,14 @@ export const ResultsList = () => {
               {results.books.map((book: Book) => (
                 <tr key={book.uid}>
                   <td scope="row">
-                    <NavLink className="bookLink" to={`details/${book.uid}`}>
+                    <button
+                      className="bookLink"
+                      onClick={() =>
+                        navigate('./details/' + book.uid, { relative: 'route' })
+                      }
+                    >
                       {book.title}
-                    </NavLink>
+                    </button>
                   </td>
                   <td>Published in {book.publishedYear}</td>
                 </tr>

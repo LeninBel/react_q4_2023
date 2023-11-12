@@ -11,6 +11,7 @@ export const Pagination = () => {
   return (
     <div className="Pagination">
       <div className="Pagination_buttons">
+        {'total' + results?.page?.totalPages}
         {Array.from({ length: results?.page?.totalPages ?? 0 }).map((_, i) => (
           <button
             key={i + 1}

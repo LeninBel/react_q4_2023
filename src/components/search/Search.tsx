@@ -13,7 +13,6 @@ export const Search = () => {
   const handleSearchClick = async () => {
     const searchTerm = seachRef.current?.value ?? '';
     setSearch(searchTerm);
-    console.log(searchTerm);
     localStorage.setItem(LOCALSTORAGE_KEY, searchTerm);
     navigate(`search/1`, { replace: true });
   };
@@ -21,12 +20,17 @@ export const Search = () => {
   return (
     <div className="search">
       <input
+        data-testid="search_input"
         type="text"
         defaultValue={search}
         ref={seachRef}
         className="searchBar"
       />
-      <button type="button" onClick={handleSearchClick}>
+      <button
+        type="button"
+        onClick={handleSearchClick}
+        data-testid="search_button"
+      >
         Search
       </button>
     </div>
