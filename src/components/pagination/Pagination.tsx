@@ -1,18 +1,18 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import './Pagination.css';
+import { AppContext } from '../../context/SearchContext';
+import { useContext } from 'react';
 
-type Props = {
-  totalPages: number;
-};
-
-export const Pagination = ({ totalPages }: Props) => {
+export const Pagination = () => {
+  const { results } = useContext(AppContext);
   const { pageId = 1 } = useParams();
   const navigate = useNavigate();
 
   return (
     <div className="Pagination">
       <div className="Pagination_buttons">
-        {Array.from({ length: totalPages }).map((_, i) => (
+        {'total' + results?.page?.totalPages}
+        {Array.from({ length: results?.page?.totalPages ?? 0 }).map((_, i) => (
           <button
             key={i + 1}
             className={`${i + 1 === +pageId ? 'button_active' : ''}`}

@@ -1,27 +1,36 @@
-import { useState } from 'react';
+import { useContext, useRef } from 'react';
 import './Search.css';
-import { getLsSearchTerm } from '../../services/localStorage';
+import { LOCALSTORAGE_KEY } from '../../services/localStorage';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/SearchContext';
 
-type Props = {
-  onClick: (searchTerm: string) => void;
-};
+export const Search = () => {
+  const navigate = useNavigate();
+  const { search, setSearch } = useContext(AppContext);
 
-export const Search = ({ onClick }: Props) => {
-  const [searchTerm, setSearchTerm] = useState(() => getLsSearchTerm());
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = event.currentTarget.value;
-    setSearchTerm(searchTerm);
+  const seachRef = useRef<HTMLInputElement>(null);
+
+  const handleSearchClick = async () => {
+    const searchTerm = seachRef.current?.value ?? '';
+    setSearch(searchTerm);
+    localStorage.setItem(LOCALSTORAGE_KEY, searchTerm);
+    navigate(`search/1`, { replace: true });
   };
 
   return (
     <div className="search">
       <input
+        data-testid="search_input"
         type="text"
-        value={searchTerm}
-        onChange={handleInput}
+        defaultValue={search}
+        ref={seachRef}
         className="searchBar"
       />
-      <button type="button" onClick={() => onClick(searchTerm)}>
+      <button
+        type="button"
+        onClick={handleSearchClick}
+        data-testid="search_button"
+      >
         Search
       </button>
     </div>

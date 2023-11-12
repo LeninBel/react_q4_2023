@@ -1,18 +1,29 @@
-import { Await, useLoaderData, useNavigate, useParams } from 'react-router-dom';
-import { Book } from '../../services/book';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Book, getBook } from '../../services/book';
 import { Loader } from '../loader/Loader';
 import './ResultDetails.css';
-import { useEffect } from 'react';
-import React from 'react';
-
-type Data = {
-  result: Promise<Book>;
-};
+import { useEffect, useState } from 'react';
 
 export const ResultDetails = () => {
-  const res = useLoaderData() as Data;
-  const { pageId = 1 } = useParams();
+  const { pageId = 1, detailsId = '' } = useParams();
+  const [result, setResult] = useState<Book | null>(null);
   const navigate = useNavigate();
+  const [isLoading, seIsLoading] = useState(false);
+
+  useEffect(() => {
+    seIsLoading(true);
+    const getData = async () => {
+      const res = await getBook(detailsId);
+
+      if (!res) {
+        navigate('/notFound');
+      }
+
+      setResult(res);
+      seIsLoading(false);
+    };
+    getData();
+  }, [detailsId, navigate]);
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -27,26 +38,23 @@ export const ResultDetails = () => {
     return () => window.removeEventListener('click', handleOutsideClick);
   }, [navigate, pageId]);
 
+  if (isLoading) {
+    return <Loader id={' card'} />;
+  }
+
+  if (!result) {
+    return null;
+  }
+
   return (
-    <React.Suspense fallback={<Loader />}>
-      <Await
-        resolve={res.result}
-        errorElement={<p>Opps something went wrong!</p>}
+    <div className="ResultDetails">
+      <button
+        className="ResultDetails_close"
+        onClick={() => navigate(`/search/${pageId}`, { replace: true })}
       >
-        {(result) => {
-          return (
-            <div className="ResultDetails">
-              <button
-                className="ResultDetails_close"
-                onClick={() => navigate(`/search/${pageId}`, { replace: true })}
-              >
-                X
-              </button>
-              {`numberOfPages ${result.numberOfPages}`}
-            </div>
-          );
-        }}
-      </Await>
-    </React.Suspense>
+        X
+      </button>
+      {`numberOfPages ${result.numberOfPages}`}
+    </div>
   );
 };

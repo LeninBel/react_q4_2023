@@ -1,10 +1,10 @@
 import './Loader.css';
 
-export const Loader = () => {
+export const Loader = ({ id = '' }: { id: string }) => {
   return (
-    <div className="loader_container">
+    <div data-testid="loader" className="loader_container">
       <div className="loader" />
-      <p>Loading...</p>
+      <p>{`Loading${id}...`}</p>
     </div>
   );
 };

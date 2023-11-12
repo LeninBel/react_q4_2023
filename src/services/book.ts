@@ -41,6 +41,7 @@ export const getBook = async (id: string): Promise<Book> => {
   const response = await fetch(`${URL_BOOK}?uid=${id}`);
 
   const { book } = await response.json();
+
   return book;
 };
 
@@ -56,10 +57,8 @@ const fetchAll = async (
     const response = await fetch(`${URL_BOOK_SEARCH}?${params}`);
 
     const responseJson = await response.json();
-    console.log(responseJson);
     return responseJson;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 };
@@ -86,7 +85,6 @@ const fetchByTitle = async (
     const responseJson = await response.json();
     return responseJson;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 };
